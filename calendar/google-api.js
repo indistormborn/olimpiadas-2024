@@ -4,7 +4,6 @@ const { google } = require('googleapis');
 
 const CREDENTIALS_PATH = process.env.CREDENTIALS_PATH;
 const TOKEN_PATH = process.env.TOKEN_PATH;
-const CALENDAR_ID = process.env.CALENDAR_ID;
 
 class GoogleAPI {
   constructor() {
@@ -31,10 +30,10 @@ class GoogleAPI {
     return GoogleAPI.instance;
   }
 
-  addEvent(eventObj) {
+  addEvent(eventObj, calendarId) {
     const calendar = google.calendar({ version: 'v3', auth: this.auth });
     return calendar.events.insert({
-      calendarId: CALENDAR_ID,
+      calendarId: calendarId,
       resource: eventObj,
     }, (err, res) => {
       if (err) return console.error('Erro ao criar o evento:', err);
