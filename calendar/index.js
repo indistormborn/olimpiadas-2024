@@ -17,19 +17,20 @@ fs.readFile(EVENTS_PATH, (err, data) => {
     return `${event.sport.toUpperCase()} | ${event.description}`;
   }
 
-  events.forEach(event => {
-    const eventObj = {
-      summary: buildName(event),
-      start: {
-        dateTime: moment(event.start).tz('America/Sao_Paulo').toISOString(),
-        timeZone: 'America/Sao_Paulo',
-      },
-      end: {
-        dateTime: moment(event.end).tz('America/Sao_Paulo').toISOString(),
-        timeZone: 'America/Sao_Paulo',
-      },
-    };
+  const eventObjects = events.map(event => ({
+    summary: buildName(event),
+    start: {
+      dateTime: moment(event.start).tz('America/Sao_Paulo').toISOString(),
+      timeZone: 'America/Sao_Paulo',
+    },
+    end: {
+      dateTime: moment(event.end).tz('America/Sao_Paulo').toISOString(),
+      timeZone: 'America/Sao_Paulo',
+    },
+  }));
 
-    googleApi.addEvent(eventObj, CALENDAR_ID);
-  });
+  const batchSize = 7; 
+  const delay = 1000; 
+
+  googleApi.addEventsInBatches(eventObjects, CALENDAR_ID, batchSize, delay);
 });
