@@ -36,7 +36,7 @@ class GoogleAPI {
   async addEvent(eventObj, calendarId) {
     try {
       const calendar = google.calendar({ version: 'v3', auth: this.auth });
-      
+
       const response = await calendar.events.insert({
         calendarId: calendarId,
         resource: eventObj,
@@ -51,7 +51,7 @@ class GoogleAPI {
   }
 
   async addEventsInBatches(events, calendarId, batchSize, delay) {
-    const logFileName = `log-${new Date().toLocaleString('pt-BR')}.csv`
+    const logFileName = `log-${Date.now()}.csv`
     for (let i = 0; i < events.length; i += batchSize) {
       const batch = events.slice(i, i + batchSize);
       await Promise.all(batch.map(event => this.addEvent(event, calendarId).then((data) => {
