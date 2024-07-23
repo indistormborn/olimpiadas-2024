@@ -35,6 +35,12 @@ class GoogleAPI {
 
   async addEvent(eventObj, calendarId) {
     try {
+      const start = new Date(eventObj.start.dateTime);
+      let end = new Date(eventObj.end.dateTime);
+      if (end <= start) {
+        end = new Date(start.getTime() + 1 * 60000);
+      }
+
       const calendar = google.calendar({ version: 'v3', auth: this.auth });
 
       const response = await calendar.events.insert({
@@ -58,11 +64,15 @@ class GoogleAPI {
         console.log('Evento criado:', data.summary);
         const hash = crypto.createHash('sha256').update(`${data.summary}${data.start.dateTime}${data.end.dateTime}`).digest('hex');
         fs.writeFileSync(logFileName, `${data.id},${hash}\n`, { encoding: 'utf-8', flag: 'a' });
+      }).catch(() => {
+        console.error('Evento não foi criado: ' + event.summary);
       })));
       console.log(`Adicionado o lote de eventos de ${i} a ${i + batchSize}`);
       await sleep(delay);
     }
   }
+
+
 }
 
 module.exports = new GoogleAPI();
