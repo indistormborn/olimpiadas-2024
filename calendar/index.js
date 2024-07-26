@@ -66,19 +66,18 @@ const buildName = (event) => {
 }
 
 const buildDescription = (event, country) => {
-  if (event.competitors.length > 2) { 
+  if (event.competitors.length > 2) {
     const countryCompetitorsNames = event.competitors.filter(competitor => competitor.noc === country).map(competitor => competitor.name);
     return `Competidores de ${country}: ${countryCompetitorsNames.join(',')} \nLocal: ${event.venue} \nStatus: ${event.statusDescription} \n`;
   }
   return `Local: ${event.venue} \nStatus: ${event.statusDescription} \n`;
 }
 
-
 olympicsApi.getCountryEvents('BRA').then(events => {
   console.log(`Events: ${events.length}`);
   const eventObjects = events.map(event => ({
     summary: buildName(event),
-    description: buildDescription(event),
+    description: buildDescription(event, 'BRA'),
     start: {
       dateTime: moment(event.startDate).tz('America/Sao_Paulo').toISOString(),
       timeZone: 'America/Sao_Paulo',
