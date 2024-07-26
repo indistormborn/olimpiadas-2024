@@ -1,39 +1,162 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Hello World</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendário das Olimpíadas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-  <!-- Don't use this in production: -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    header {
+      background-color: #4bd44f;
+      /* Verde claro */
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      margin: 20px;
+      padding: 20px;
+      background-color: #fcf4a5;
+      /* Amarelo claro */
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1,
+    h2 {
+      color: #040b47;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 15px;
+      color: white;
+      background-color: #81c784;
+      /* Verde claro */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #66bb6a;
+    }
+
+    .calendar-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    iframe {
+      border: solid 1px #777;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 800px;
+      height: 600px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #a5d6a7;
+      /* Verde claro */
+      color: white;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    .links a {
+      color: rgb(16, 4, 71);
+      text-decoration: none;
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
+  <header>
+    <h1>🇧🇷 Brasil nas Olimpíadas 2024!</h1>
+  </header>
+  <main>
+    <h2>Informações sobre o calendário</h2>
+    <ul>
+      <li>Este é um Google Calendar, que inclui datas e horários das competições que o Brasil participará nas
+        Olímpiadas.</li>
+      <li>Cada evento contém no título <code>ESPORTE | Evento</code>.</li>
+      <ul>
+        <li>Em casos de esportes coletivos, os títulos vão conter o adversário do Brasil.</li>
+        <li>Esportes coletivos têm o nome dos competidores na descrição.</li>
+      </ul>
+      <li>As descrições contêm o local e o status do evento (Concluído, Programado, Cancelado, etc).</li>
+      <li>Ele vai ser atualizado periodicamente, no mínimo uma vez por dia, com novos eventos ou alterações em eventos
+        já adicionados.</li>
+      <li>Cada evento tem um lembrete de 10 minutos.</li>
+      <li>Se for adicionar o calendário ao seu Google Calendar, não se preocupe, toda atualização vai automaticamente ;)
+      </li>
+    </ul>
 
-    function MyApp() {
-      return <h1>Hello, world!</h1>;
-    }
+    <h2>Baixar ou Copiar o Calendário</h2>
+    <a href="https://calendar.google.com/calendar/ical/3e6f36c98e89c0d047505bf5a45b5f4732b8c544b590f310e3865d2218055f9a%40group.calendar.google.com/public/basic.ics"
+      class="btn">Baixar Calendário</a>
+    <p>Você também pode copiar o link do calendário para adicioná-lo manualmente ao seu Google Calendar:</p>
+    <code>https://calendar.google.com/calendar/ical/3e6f36c98e89c0d047505bf5a45b5f4732b8c544b590f310e3865d2218055f9a%40group.calendar.google.com/public/basic.ics</code>
 
-    const container = document.getElementById('root');
-    const root = ReactDOM.createRoot(container);
-    root.render(<MyApp />);
+    <h2>Como Adicionar o Calendário ao Google Calendar</h2>
+    <p>Existem duas formas de adicionar o calendário ao seu Google Calendar: pelo link ou pelo arquivo. Veja as
+      instruções abaixo:</p>
 
-  </script>
-  <!--
-      Note: this page is a great way to try React but it's not suitable for production.
-      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+    <h3>Adicionar pelo Link</h3>
+    <ol>
+      <li>Abra o Google Calendar.</li>
+      <li>No menu à esquerda, clique em <strong>"Adicionar calendário"</strong> e selecione <strong>"Do URL"</strong>.
+      </li>
+      <li>Insira o URL do calendário e clique em <strong>"Adicionar calendário"</strong>.</li>
+      <li>O calendário das Olimpíadas agora aparecerá na sua lista de calendários.</li>
+    </ol>
 
-      Read this page for starting a new React project with JSX:
-      https://react.dev/learn/start-a-new-react-project
+    <h3>Adicionar pelo Arquivo</h3>
+    <ol>
+      <li>Baixe o arquivo do calendário usando o botão acima.</li>
+      <li>Abra o Google Calendar.</li>
+      <li>No menu à esquerda, clique em <strong>"Adicionar calendário"</strong> e selecione <strong>"Importar"</strong>.
+      </li>
+      <li>Selecione o arquivo baixado e escolha o calendário onde deseja adicionar os eventos.</li>
+      <li>Clique em <strong>"Importar"</strong>.</li>
+      <li>Os eventos do calendário das Olimpíadas agora aparecerão no calendário selecionado.</li>
+    </ol>
+    <p>Observação: Além do Google Calendar, o arquivo do calendário pode ser adicionado a outros sistemas de calendário
+      que suportem o formato iCal.</p>
 
-      Read this page for adding React with JSX to an existing project:
-      https://react.dev/learn/add-react-to-an-existing-project
-    -->
+    <div class="calendar-container">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FSao_Paulo&bgcolor=%23ffffff&mode=WEEK&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&src=M2U2ZjM2Yzk4ZTg5YzBkMDQ3NTA1YmY1YTQ1YjVmNDczMmI4YzU0NGI1OTBmMzEwZTM4NjVkMjIxODA1NWY5YUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23D81B60"
+        frameborder="0" scrolling="no"></iframe>
+    </div>
+    <div></div>
+  </main>
+  <footer>
+    <p class="links">&copy; <a href="https://github.com/indistormborn" target="_blank">indistormborn</a> | qualquer
+      problema me chama no <a href="https://twitter.com/blackfyre_" target="_blank">twitter</a></p>
+  </footer>
 </body>
 
 </html>
