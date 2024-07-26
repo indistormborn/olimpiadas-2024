@@ -1,4 +1,3 @@
-const axios = require('axios')
 
 class OlympicsApi {
   constructor() {
@@ -13,11 +12,16 @@ class OlympicsApi {
 
   async getCountryEvents(country) {
     try {
-      const response = await axios.get(this.urls[country]);
-      return response.data;
+      const response = await fetch(this.urls[country], {
+        referrerPolicy: "strict-origin-when-cross-origin",
+        body: null,
+        method: "GET",
+      });
+      const json = await response.json();
+      return json.units;
     } catch (error) {
       console.error(`Erro ao buscar eventos para o país: ${country}`, error);
-      throw error; 
+      throw error;
     }
   }
 }
