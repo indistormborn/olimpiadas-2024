@@ -17,11 +17,9 @@ Para tutoriais acessar o calendário e adicionar ao Google Calendar, acesse: htt
 Contribuições são sempre bem-vindas. Caso tenha sugestões de melhorias ou correções, por favor, abra uma issue ou envie um pull request.
 
 ## TODO
-- [ ] Add `listEvents` ao GoogleAPI
-- [ ] Add `updateEvent` ao GoogleAPI
-- [ ] Add `updateEventsInBatches` ao GoogleAPI
-- [ ] Add checkagem de hashes dos logs para verificar se o evento teve alguma atualização de horário
-- [ ] Criar função lambda com cron de x em x horas pra atualizar eventos
+- Add `updateEventsInBatches` ao GoogleAPI
+- Add checkagem de hashes dos logs para verificar se o evento teve alguma atualização de horário
+- Criar função lambda com cron de x em x horas pra atualizar eventos
 ___
 #### Nota sobre Scrapping [DEPRECADO]
 

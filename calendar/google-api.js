@@ -72,7 +72,47 @@ class GoogleAPI {
     }
   }
 
+  async listEvents(calendarId) {
+    try {
+      const calendar = google.calendar({ version: 'v3', auth: this.auth });
+      const response = await calendar.events.list({
+        calendarId: calendarId,
+      });
+      return response.data.items;
+    } catch (err) {
+      console.error('Erro ao listar eventos:', err);
+      throw err;
+    }
+  }
 
+  async deleteEvent(eventId, calendarId) {
+    try {
+      const calendar = google.calendar({ version: 'v3', auth: this.auth });
+      await calendar.events.delete({
+        calendarId: calendarId,
+        eventId: eventId,
+      });
+    } catch (err) {
+      console.error('Erro ao deletar evento:', err);
+      throw err;
+    }
+  }
+
+  async updateEvent(eventId, calendarId, updatedEvent) {
+    try {
+      const calendar = google.calendar({ version: 'v3', auth: this.auth });
+      const response = await calendar.events.update({
+        calendarId: calendarId,
+        eventId: eventId,
+        resource: updatedEvent,
+      });
+      console.log('Evento atualizado:', response.data.summary);
+      return response.data;
+    } catch (err) {
+      console.error('Erro ao atualizar evento:', err);
+      throw err;
+    }
+  }
 }
 
 module.exports = new GoogleAPI();
