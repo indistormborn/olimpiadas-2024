@@ -73,25 +73,61 @@ const buildDescription = (event, country) => {
   return `Local: ${event.locationDescription} \nStatus: ${event.statusDescription} \n`;
 }
 
-olympicsApi.getCountryEvents('BRA').then(events => {
-  console.log(`Events: ${events.length}`);
-  const eventObjects = events.map(event => ({
-    summary: buildName(event),
-    description: buildDescription(event, 'BRA'),
-    start: {
-      dateTime: moment(event.startDate).tz('America/Sao_Paulo').toISOString(),
-      timeZone: 'America/Sao_Paulo',
-    },
-    end: {
-      dateTime: moment(event.endDate).isAfter(moment(event.startDate)) ? moment(event.endDate).tz('America/Sao_Paulo').toISOString() : moment(event.startDate).tz('America/Sao_Paulo').toISOString(),
-      timeZone: 'America/Sao_Paulo',
-    },
-  }));
+const brazilSportsCodes = [
+  'ATH', 'BDM', 'BKB', 'BOX', 'CSL',
+  'CSP', 'BMF', 'BMX', 'CRD', 'MTB',
+  'FEN', 'FBL', 'GAR', 'GTR', 'GRY',
+  'HBL', 'EQU', 'JUD', 'WLF', 'WRE',
+  'OWS', 'SWM', 'MPN', 'ROW', 'RU7',
+  'DIV', 'SKB', 'SRF', 'TKW', 'TEN',
+  'TTE', 'ARC', 'SHO', 'TRI', 'SAL',
+  'VVO', 'VBV'
+];
 
-  const batchSize = 7;
-  const delay = 1000;
+async function insertEvents() {
+  try {
+    // pega os eventos que tem pessoas do brasil listadas como competidoras
+    const countryEvents = await olympicsApi.getCountryEvents('BRA');
+    console.log(`Country events: ${countryEvents.length}`);
 
-  googleApi.addEventsInBatches(eventObjects, CALENDAR_ID, batchSize, delay);
-}).catch(err => {
-  console.error(err);
-});
+    // pega os codigos dos eventos
+    const countrySports = Array.from(new Set(countryEvents.map(event => event.disciplineCode)));
+    console.log(`Country sports: ${countrySports.length}`);
+
+    // verifica quais eventos do brasil não vieram pelo endpoint do país
+    const remainingSportsCodes = brazilSportsCodes.filter(sport => !countrySports.includes(sport));
+    console.log(`Remaining sports: ${remainingSportsCodes.length}`);
+
+    const events = countryEvents;
+    for (const sport of remainingSportsCodes) {
+      const sportEvents = await olympicsApi.getSportEvents(sport);
+      events.push(...sportEvents);
+      console.log(`Events for ${sport}: ${sportEvents.length}`);
+    }
+
+    console.log(`Total events: ${events.length}`);
+
+    const eventObjects = events.map(event => ({
+      summary: buildName(event),
+      description: buildDescription(event, 'BRA'),
+      start: {
+        dateTime: moment(event.startDate).tz('America/Sao_Paulo').toISOString(),
+        timeZone: 'America/Sao_Paulo',
+      },
+      end: {
+        dateTime: moment(event.endDate).isAfter(moment(event.startDate)) ? moment(event.endDate).tz('America/Sao_Paulo').toISOString() : moment(event.startDate).tz('America/Sao_Paulo').toISOString(),
+        timeZone: 'America/Sao_Paulo',
+      },
+    }));
+
+    const batchSize = 7;
+    const delay = 1000;
+
+    await googleApi.addEventsInBatches(eventObjects, CALENDAR_ID, batchSize, delay);
+  } catch (error) {
+    console.error('Erro ao processar eventos:', error);
+  }
+}
+
+insertEvents();
+
