@@ -77,6 +77,7 @@ class GoogleAPI {
       const calendar = google.calendar({ version: 'v3', auth: this.auth });
       const response = await calendar.events.list({
         calendarId: calendarId,
+        singleEvents: true,
       });
       return response.data.items;
     } catch (err) {
