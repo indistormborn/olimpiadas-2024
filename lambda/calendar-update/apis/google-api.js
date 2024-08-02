@@ -5,8 +5,6 @@ const { google } = require('googleapis');
 const CREDENTIALS_PATH = process.env.CREDENTIALS_PATH;
 const TOKEN_PATH = process.env.TOKEN_PATH;
 
-const crypto = require('crypto');
-
 class GoogleAPI {
   constructor() {
     if (!GoogleAPI.instance) {
@@ -56,13 +54,10 @@ class GoogleAPI {
   }
 
   async addEventsInBatches(events, calendarId, batchSize, delay) {
-    const logFileName = `log-${Date.now()}.csv`
     for (let i = 0; i < events.length; i += batchSize) {
       const batch = events.slice(i, i + batchSize);
       await Promise.all(batch.map(event => this.addEvent(event, calendarId).then((data) => {
         console.log('Evento criado:', data.summary);
-        const hash = crypto.createHash('sha256').update(`${data.summary}${data.start.dateTime}${data.end.dateTime}`).digest('hex');
-        fs.writeFileSync(logFileName, `${data.id},${hash}\n`, { encoding: 'utf-8', flag: 'a' });
       }).catch(() => {
         console.error('Evento não foi criado: ' + event.summary);
       })));
