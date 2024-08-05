@@ -72,14 +72,22 @@ class GoogleAPI {
     }
   }
 
-  async listEvents(calendarId) {
+  async listEvents(calendarId, options = {}, events = []) {
     try {
       const calendar = google.calendar({ version: 'v3', auth: this.auth });
       const response = await calendar.events.list({
         calendarId: calendarId,
         singleEvents: true,
+        ...options,
       });
-      return response.data.items;
+
+      events = [...events, ...response.data.items];
+
+      if(response.data.nextPageToken) {
+        return this.listEvents(calendarId, { ...options, pageToken: response.data.nextPageToken }, events);
+      }
+
+      return events;
     } catch (err) {
       console.error('Erro ao listar eventos:', err);
       throw err;
